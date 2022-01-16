@@ -93,12 +93,12 @@ SLASH_MOGGERS1 = '/moggers';
 SlashCmdList["MOGGERS"] = function(msg, editbox)
     local _, _, cmd, args = string.find(msg, "%s?(%w+)%s?(.*)")
 
-    if cmd == "show" then
+    if cmd and string.lower(cmd) == "show" then
         Moggers.frame:Show();
-    elseif cmd == "hide" then
+    elseif cmd and string.lower(cmd) == "hide" then
         Moggers.frame:Hide();
     else
-        DEFAULT_CHAT_FRAME:AddMessage("List of Commands: Show, Hide")
+        DEFAULT_CHAT_FRAME:AddMessage("Use Alt+Z to hide the UI and capture a screenshot with the Moggers QR code. Use the left button to position the QR code and the right button to hide it for non-Moggers screen shots.")
     end
 end;
 
@@ -140,6 +140,7 @@ function Moggers.frame:PLAYER_ENTERING_WORLD(delayed)
 	self:RegisterForDrag("LeftButton");
 	self:SetScript("OnDragStart", self.OnDragStart);
 	self:SetScript("OnDragStop", self.OnDragStop);
+    self:SetScript("OnMouseDown", self.OnMouseDown);
     self:Hide();
 end
 
@@ -230,4 +231,10 @@ function Moggers.frame:OnDragStop ()
 	MoggersPerCharDB.Frame_myRelativePoint = myRelativePoint;
 	MoggersPerCharDB.Frame_myXOfs = myXOfs;
 	MoggersPerCharDB.Frame_myYOfs = myYOfs ;
+end
+
+function Moggers.frame:OnMouseDown (button)
+    if button == 'RightButton' then
+        self:Hide()
+    end
 end
